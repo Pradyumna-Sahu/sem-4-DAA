@@ -1,0 +1,43 @@
+// Create an array using dynamic memory allocation technique and store n random numbers between 20 to 30 to it. Pass the array to a function and find the average.
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Function to calculate the average
+float avg(int *a, int n) {
+    int max = 30, min = 20, i, s = 0;
+    // Fill the array with random numbers between 20 and 30
+    for(i = 0; i < n; i++) {
+        a[i] = min + rand() % (max - min + 1); // Random number between 20 and 30
+    }
+    // Calculate the sum of the array
+    for(i = 0; i < n; i++) {
+        s = s + a[i];
+    }
+    // Calculate and return the average
+    return (float)s / n;
+}
+
+int main() {
+    int *a;
+    int n = 5; // Number of random numbers
+
+    // Dynamically allocate memory for the array
+    a = (int *)malloc(n * sizeof(int));
+
+    if (a == NULL) {
+        printf("Memory allocation failed.\n");
+        return -1;
+    }
+
+    // Seed the random number generator (only once)
+    srand(time(0));
+
+    // Calculate and print the average
+    printf("Average: %f\n", avg(a, n));
+
+    // Free the dynamically allocated memory
+    free(a);
+
+    return 0;
+}
