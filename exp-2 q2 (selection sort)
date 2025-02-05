@@ -1,0 +1,68 @@
+// Use random number generator to generate 10 numbers between 20 to 50. Store them in a text file called "num.txt". Read the numbers from the file and use selection sort in non-increasing(decreasing) order and show the partially sorted array for the kth pass. Call the function from main method and finally show the sorted array.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>\
+#define N 10
+
+void print(int a[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+}
+
+void selectionsort(int a[], int n, int k) {
+    int i, j, temp;
+    for (i = 0; i < n - 1; i++) {
+        int max = i;  
+        for (j = i + 1; j < n; j++) {
+            if (a[j] > a[max]) {
+                max = j;
+            }
+        }
+        temp = a[i];
+        a[i] = a[max];
+        a[max] = temp;
+        if (k == i) {
+            printf("Iteration-%d: ", i + 1);
+            print(a, n);
+        }
+    }
+    printf("Sorted array:\n");
+    print(a, n);
+}
+
+int main() {
+    FILE *fp;
+    int a, k;
+    fp = fopen("num.txt", "w");
+    srand(time(0));
+    printf("Enter the kth pass to show the state of the partially sorted array: ");
+    scanf("%d", &k);
+    for (int i = 0; i < N; i++) {
+        a = 20 + rand() % (50 - 20 + 1);  // max = 50, min = 20
+        fprintf(fp, "%d ", a);  
+    }
+    fclose(fp);
+
+    fp = fopen("num.txt", "r");
+    int sort[N];
+    printf("Unsorted array:\n");
+    for (int i = 0; i < N; i++) {
+        fscanf(fp, "%d", &sort[i]);  
+    }
+    fclose(fp);
+    print(sort, N);
+    selectionsort(sort, N, k);
+    return 0;
+}
+
+/* OUTPUT
+Enter the kth pass to show the state of the partially sorted array: 3
+Unsorted array:
+34 27 42 31 48 22 45 33 29 39
+Iteration-3: 48 45 42 31 34 22 27 33 29 39
+Sorted array:
+48 45 42 39 34 33 31 29 27 22
+*/
