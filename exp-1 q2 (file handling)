@@ -1,0 +1,51 @@
+// Program to read a file called "mystr.txt" and then count the number of occurances of all alphabets present in the string reagardless of the case
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+int main() {
+    FILE *fp;
+    fp = fopen("mystr.txt", "w"); 
+    if (fp == NULL) {
+        printf("Could not open file for writing.\n");
+        return 1;
+    }
+    char s[100];
+    int count[26] = {0}; 
+    char ch;
+    printf("Enter a string: ");
+    // Capture input with spaces
+    scanf("%[^\n]", s);
+    fprintf(fp, "%s", s); 
+    fclose(fp);
+
+    fp = fopen("mystr.txt", "r");  
+    if (fp == NULL) {
+        printf("Could not open file for reading.\n");
+        return 1;
+    }
+    while ((ch = fgetc(fp)) != EOF) {
+        if (isalpha(ch)) { 
+            ch = tolower(ch);
+            count[ch - 'a']++;
+        }
+    }
+    for (int i = 0; i < 26; i++) {
+        if (count[i] != 0) {
+            printf("%c occurs %d times in the entered string\n", i + 'a', count[i]);
+        }
+    }
+    fclose(fp);
+    return 0;
+}
+
+/* OUTPUT
+Enter a string: Hello World
+h occurs 1 times in the entered string
+e occurs 1 times in the entered string
+l occurs 3 times in the entered string
+o occurs 2 times in the entered string
+w occurs 1 times in the entered string
+r occurs 1 times in the entered string
+d occurs 1 times in the entered string
+*/
