@@ -1,0 +1,41 @@
+// Program to syore n random variables into a text file "num,txt" and then recall the numbers from the file to find the average of the numbers
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+int main() {
+    int n;
+    printf("Enter the number of random integers: ");
+    scanf("%d", &n);
+    FILE *fp = fopen("num.txt", "w");
+    srand(time(0));
+    int max = 60, min = 20;
+    printf("Random numbers generated:\n");
+    for (int i = 0; i < n; i++) {
+        int num = rand() % (max - min + 1) + min;  
+        fprintf(fp, "%d\n", num);  
+        printf("%d ", num);         
+    }
+    printf("\n");
+    fclose(fp);  
+    
+    fp = fopen("num.txt", "r");
+    int sum = 0;
+    int count = 0;
+    int num;
+    while (fscanf(fp, "%d", &num) != EOF) {
+        sum += num;
+        count++;
+    }
+    double average = (double)sum / count;
+    printf("The average of the numbers is: %.2f\n", average);
+    fclose(fp);  
+    return 0;
+}
+
+/* OUTPUT
+Enter the number of random integers: 5
+Random numbers generated:
+45 32 58 23 49 
+The average of the numbers is: 41.40
+*/
