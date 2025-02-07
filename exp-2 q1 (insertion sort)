@@ -1,51 +1,61 @@
 // Use a random number generator to generate 10 numbers between 20 to 50. USe insertion sort function to sort in non-increasing(decreasing) order and show the partially sorted array for the kth pass. Call the function from main methodand finally show the sorted array
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-int print(int a[],int n) {
-    for(int i=0;i<n;i++) {
-        printf("%d ",a[i]);
+int print(int a[], int n) {
+    for (int i = n - 1; i >= 0; i--) {  
+        printf("%d ", a[i]);
     }
     printf("\n");
 }
 
-void insertionsort(int a[],int n,int k) {
-    int i,j,key;
-    for(i=1;i<n;i++) {
+void insertionsort(int a[], int n, int k) {
+    int i, j, key;
+    for (i = 1; i < n; i++) {
         key = a[i];
-        j = i - 2;
-        while(j >= 0 && a[j] < key) {
-            a[j+1] = a[j];
+        j = i - 1;  
+        while (j >= 0 && a[j] < key) {  
+            a[j + 1] = a[j];
             j--;
         }
-        if(k == i) {
-            printf("Iteration-%d: ",i);
-            print(a,n);
+        a[j + 1] = key;
+
+        if (i == k) {  
+            printf("Iteration-%d: ", i);
+            print(a, n);
         }
     }
     printf("Sorted array:\n");
-    print(a,n);
+    print(a, n);
 }
+
 int main() {
     srand(time(0));
     int arr[10];
     int k;
-    printf("Enter kth pass to show of the partially sorted array: ");
-    scanf("%d",&k);
-    for(int i=0;i<10;i++) {
-        int a = 20 + rand() % (50 - 20) + 1; //max = 50, min = 20
-        arr[i] = a;
+    
+    for (int i = 0; i < 10; i++) {
+        arr[i] = 20 + rand() % 31;  
     }
-    insertionsort(arr,10,k);
-    printf("\n");
+
+    printf("Unsorted array:\n");
+    print(arr, 10);
+
+    printf("Enter kth pass to show of the partially sorted array: ");
+    scanf("%d", &k);
+
+    insertionsort(arr, 10, k);
+
     return 0;
 }
 
 /* OUTPUT
-Enter kth pass to show of the partially sorted array: 4
-Iteration-4: 43 41 27 27 32 37 27 38 24 44 
+Unsorted array:
+31 21 27 24 26 26 24 35 20 32 
+Enter kth pass to show of the partially sorted array: 5
+Iteration-5: 31 21 27 24 20 24 26 26 32 35 
 Sorted array:
-43 43 41 27 27 27 27 37 38 44 
+20 21 24 24 26 26 27 31 32 35 
 */
