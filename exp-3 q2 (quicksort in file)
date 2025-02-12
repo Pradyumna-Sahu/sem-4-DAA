@@ -1,0 +1,89 @@
+// Write a C Program to store a given set of elements in a file caved "num.txt" and read the numbers from the file and store in an array and then using quick sort method sort the array, Choosing the last element as pivot element. Sort the array in decreasing onder.
+
+#include <stdio.h>
+#include <stdlib.h>
+#define SIZE 10  
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high]; 
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] > pivot) {
+            swap(&arr[++i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return i + 1;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void writeToFile() {
+    FILE *file = fopen("num.txt", "w");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+    
+    int numbers[SIZE] = {45, 32, 67, 23, 89, 12, 90, 56, 78, 34};
+    for (int i = 0; i < SIZE; i++) {
+        fprintf(file, "%d\n", numbers[i]);
+    }
+    fclose(file);
+}
+
+void readFromFile(int arr[]) {
+    FILE *file = fopen("num.txt", "r");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    for (int i = 0; i < SIZE; i++) {
+        fscanf(file, "%d", &arr[i]);
+    }
+
+    fclose(file);
+}
+
+void printArray(int arr[]) {
+    for (int i = 0; i < SIZE; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int arr[SIZE];
+    writeToFile();
+    readFromFile(arr);
+
+    printf("Unsorted Array:\n");
+    printArray(arr);
+    quickSort(arr, 0, SIZE - 1);
+
+    printf("Sorted Array (Descending Order):\n");
+    printArray(arr);
+
+    return 0;
+}
+
+/* OUTPUT
+Unsorted Array:
+45 32 67 23 89 12 90 56 78 34 
+Sorted Array (Descending Order):
+90 89 78 67 56 45 34 32 23 12 
+*/
