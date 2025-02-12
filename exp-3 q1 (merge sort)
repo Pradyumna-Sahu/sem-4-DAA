@@ -1,0 +1,91 @@
+// Write a C program that generates 7 random numbers between 30 to 70 and store in an array ARR, Implement the merge sort to sort the array ARR in non-decresing order. Use recursive approach.SHow the number of steps required to sort all the elemnets.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define SIZE 7
+
+int mergeSortSteps = 0; 
+
+void generateRandomNumbers(int arr[], int n) {
+    srand(time(0)); 
+    for (int i = 0; i < n; i++) {
+        arr[i] = (rand() % 41) + 30; 
+    }
+}
+
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+void merge(int arr[], int left, int mid, int right) {
+    int i, j, k;
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    int L[n1], R[n2];
+    for (i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+    i = 0;
+    j = 0;
+    k = left;
+    while (i < n1 && j < n2) {
+        mergeSortSteps++; 
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+        mergeSortSteps++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+        mergeSortSteps++; 
+    }
+}
+
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+
+int main() {
+    int ARR[SIZE];
+    generateRandomNumbers(ARR, SIZE);
+    printf("Unsorted Array:\n");
+    printArray(ARR, SIZE);
+    mergeSortSteps = 0;
+    mergeSort(ARR, 0, SIZE - 1);
+    printf("Sorted Array:\n");
+    printArray(ARR, SIZE);
+    printf("Number of steps taken in Merge Sort: %d\n", mergeSortSteps);
+    return 0;
+}
+
+/* OUTPUT
+Unsorted Array:
+68 45 50 65 35 36 45 
+Sorted Array:
+35 36 45 45 50 65 68 
+Number of steps taken in Merge Sort: 20
+*/
