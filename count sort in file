@@ -1,0 +1,102 @@
+// Implement the Counting Sort algorithm in C and store the original and sorted arrays in a text file. The program should generate a random array of integers, sort it using Counting Sort, and print both the original and sorted arrays to the console as well as save them to a file. The program should also allow the user to input the size of the array.
+
+//count sort
+#include <stdio.h>
+#include <stdlib.h>
+#include<time.h>
+#define MAX_VALUE 100  
+
+// Function to perform Counting Sort
+void countSort(int arr[], int n) {
+    int count[MAX_VALUE + 1] = {0};  
+    int output[n]; 
+
+    // Count the occurrences of each element
+    for (int i = 0; i < n; i++) {
+        count[arr[i]]++;
+    }
+
+    // Compute the prefix sum to get positions
+    for (int i = 1; i <= MAX_VALUE; i++) {
+        count[i] += count[i - 1];
+    }
+
+    // Build the output array
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[arr[i]] - 1] = arr[i];
+        count[arr[i]]--;
+    }
+
+    // Copy sorted elements back to original array
+    for (int i = 0; i < n; i++) {
+        arr[i] = output[i];
+    }
+}
+
+// Function to print an array
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+//storing the value in text file 
+void printText(int arr[] , int n){
+    FILE *f;
+    f = fopen("count.txt", "a");
+    fprintf(f,"Sorted array : \n");
+    for(int i = 0 ; i<n ;i++){
+        fprintf(f,"%d\n",arr[i]);
+    } //fprintf(f,"\n");
+    fclose(f);
+}
+
+// Main function
+int main() {
+    FILE *f;
+    srand(time(0));
+    f = fopen("count.txt", "w");
+    int n ,a = 0 , b =10 ;
+    int min = 0 , max = 100;
+    printf("Enter the size of the array: ");
+    n = a+rand() % (b-a)+1;
+    printf("Size of the array is %d\n",n);
+    int arr[n];
+    fprintf(f,"Original array : \n");
+    for(int i =0 ; i < n ;i++){
+        arr[i] = min + rand() % (max - min + 1);
+        fprintf(f,"%d\n",arr[i]);
+    }
+    fclose(f);
+    printf("Original array: ");
+    printArray(arr, n);
+
+    countSort(arr, n);
+
+    printf("Sorted array: ");
+    printArray(arr, n);
+    printText(arr,n);
+    return 0;
+}
+
+/* OUTPUT
+Enter the size of the array: 5
+Size of the array is 5
+Original array:  39 74 28 10 53 
+Sorted array:  10 28 39 53 74 
+
+Original array : 
+39
+74
+28
+10
+53
+Sorted array : 
+10
+28
+39
+53
+74
+
+*/
