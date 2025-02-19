@@ -1,0 +1,70 @@
+// C Program to generate 15 rnadom numbers between 1 to 7 and store in an array. The required array must be created dynamically. Use counting sort technique to sort the generated numbers.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Function to perform Counting Sort
+void countSort(int *arr, int n, int max) {
+    int *count = (int *)calloc(max + 1, sizeof(int)); // Create and initialize count array
+    int *output = (int *)malloc(n * sizeof(int)); // Output array
+
+    // Count occurrences of each element
+    for (int i = 0; i < n; i++) {
+        count[arr[i]]++;
+    }
+
+    // Overwrite original array with sorted values
+    int index = 0;
+    for (int i = 1; i <= max; i++) { // Numbers range from 1 to 7
+        while (count[i] > 0) {
+            arr[index++] = i;
+            count[i]--;
+        }
+    }
+
+    // Free allocated memory
+    free(count);
+    free(output);
+}
+
+// Function to print an array
+void printArray(int *arr, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+// Main function
+int main() {
+    int n = 15, min = 1, max = 7;
+    int *arr = (int *)malloc(n * sizeof(int)); // Dynamically allocate array
+
+    // Seed for random number generation
+    srand(time(0));
+
+    // Generate random numbers between 1 and 7
+    printf("Generated Random Numbers: ");
+    for (int i = 0; i < n; i++) {
+        arr[i] = min + rand() % (max - min + 1);
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Sort the array using Counting Sort
+    countSort(arr, n, max);
+
+    // Print the sorted array
+    printf("Sorted Array: ");
+    printArray(arr, n);
+
+    // Free dynamically allocated memory
+    free(arr);
+
+    return 0;
+}
+
+/* OUTPUT
+
+*/
