@@ -4,67 +4,76 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Function to perform Counting Sort
-void countSort(int *arr, int n, int max) {
-    int *count = (int *)calloc(max + 1, sizeof(int)); // Create and initialize count array
-    int *output = (int *)malloc(n * sizeof(int)); // Output array
-
-    // Count occurrences of each element
-    for (int i = 0; i < n; i++) {
+void countingSort(int arr[], int n, int range) {
+    // Create a count array to store count of each number
+    int* count = (int*)calloc(range + 1, sizeof(int));
+    
+    // Create output array
+    int* output = (int*)malloc(n * sizeof(int));
+    
+    // Store count of each number
+    for(int i = 0; i < n; i++) {
         count[arr[i]]++;
     }
-
-    // Overwrite original array with sorted values
-    int index = 0;
-    for (int i = 1; i <= max; i++) { // Numbers range from 1 to 7
-        while (count[i] > 0) {
-            arr[index++] = i;
-            count[i]--;
-        }
+    
+    // Modify count array to store actual position of each number
+    for(int i = 1; i <= range; i++) {
+        count[i] += count[i-1];
     }
-
-    // Free allocated memory
+    
+    // Build output array
+    for(int i = n-1; i >= 0; i--) {
+        output[count[arr[i]]-1] = arr[i];
+        count[arr[i]]--;
+    }
+    
+    // Copy output array to original array
+    for(int i = 0; i < n; i++) {
+        arr[i] = output[i];
+    }
+    
+    // Free dynamically allocated memory
     free(count);
     free(output);
 }
 
-// Function to print an array
-void printArray(int *arr, int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-}
-
-// Main function
 int main() {
-    int n = 15, min = 1, max = 7;
-    int *arr = (int *)malloc(n * sizeof(int)); // Dynamically allocate array
-
-    // Seed for random number generation
+    int n = 15;  // Number of elements
+    int range = 7;  // Range of numbers (1 to 7)
+    
+    // Dynamically allocate array
+    int* arr = (int*)malloc(n * sizeof(int));
+    
+    // Seed the random number generator
     srand(time(0));
-
+    
     // Generate random numbers between 1 and 7
-    printf("Generated Random Numbers: ");
-    for (int i = 0; i < n; i++) {
-        arr[i] = min + rand() % (max - min + 1);
+    printf("Unsorted Array:\n ");
+    for(int i = 0; i < n; i++) {
+        arr[i] = (rand() % range) + 1;  // Generate number between 1 and 7
         printf("%d ", arr[i]);
     }
     printf("\n");
-
-    // Sort the array using Counting Sort
-    countSort(arr, n, max);
-
-    // Print the sorted array
-    printf("Sorted Array: ");
-    printArray(arr, n);
-
+    
+    // Sort the array using counting sort
+    countingSort(arr, n, range);
+    
+    // Print sorted array
+    printf("Sorted Array: \n");
+    for(int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    
     // Free dynamically allocated memory
     free(arr);
-
+    
     return 0;
 }
 
 /* OUTPUT
-
+Unsorted Array:
+6 2 5 7 5 4 5 1 6 5 3 1 6 5 2 
+Sorted Array: 
+1 1 2 2 3 4 5 5 5 5 5 6 6 6 7 
 */
