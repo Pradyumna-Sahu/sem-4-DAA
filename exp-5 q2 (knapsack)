@@ -1,0 +1,83 @@
+//Write a C Program to find an optimal solution by using fractional kanpsack. Capacity of knapsack is M. We have N objects with their respective weights in a set W and profit a set P. Fill the knapsack that maximizes total profit and display the content of the knapsack. Use insertion sort to arrange P/W). 
+//Given, W[3] = {10,20,30} and P[3] = {60,100,120} and M = 50
+
+#include <stdio.h>
+
+typedef struct {
+    double weight;
+    double profit;
+    double ratio;
+    int index;
+} Item;
+
+void insertionSort(Item items[], int n) {
+    int i, j;
+    Item key;
+    for (i = 1; i < n; i++) {
+        key = items[i];
+        j = i - 1;
+        while (j >= 0 && items[j].ratio < key.ratio) {
+            items[j + 1] = items[j];
+            j = j - 1;
+        }
+        items[j + 1] = key;
+    }
+}
+
+void fractionalKnapsack(Item items[], int n, double capacity) {
+    insertionSort(items, n);
+
+    double totalProfit = 0.0;
+    double currentWeight = 0.0;
+
+    printf("Items in Knapsack:\n");
+    printf("Item\tWeight\tProfit\tFraction\n");
+
+    for (int i = 0; i < n; i++) {
+        if (currentWeight + items[i].weight <= capacity) {
+            currentWeight += items[i].weight;
+            totalProfit += items[i].profit;
+            printf("%d\t%.2lf\t%.2lf\t1.00\n", items[i].index, items[i].weight, items[i].profit);
+        } else {
+            double remainingCapacity = capacity - currentWeight;
+            if (remainingCapacity > 0) {
+                double fraction = remainingCapacity / items[i].weight;
+                currentWeight += remainingCapacity;
+                totalProfit += items[i].profit * fraction;
+                printf("%d\t%.2lf\t%.2lf\t%.2lf\n", items[i].index, items[i].weight, items[i].profit, fraction);
+            }
+            break;
+        }
+    }
+
+    printf("Total Profit: %.2lf\n", totalProfit);
+}
+
+int main() {
+    int n = 3;
+    double capacity = 50.0;
+    double weights[] = {10, 20, 30};
+    double profits[] = {60, 100, 120};
+
+    Item items[n];
+
+    for (int i = 0; i < n; i++) {
+        items[i].index = i + 1;
+        items[i].weight = weights[i];
+        items[i].profit = profits[i];
+        items[i].ratio = profits[i] / weights[i];
+    }
+
+    fractionalKnapsack(items, n, capacity);
+
+    return 0;
+}
+
+/* OUTPUT
+Items in Knapsack:
+Item	Weight	Profit	Fraction
+1	10.00	60.00	1.00
+2	20.00	100.00	1.00
+3	30.00	120.00	0.67
+Total Profit: 240.00
+*/
