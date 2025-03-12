@@ -1,0 +1,53 @@
+//C program where suppose you are given with a set of N denominations 500,200,100,50,20,10,5,2,1. Using greedy method find minimum number coins to carry a total value of V(17333). The output should be in tabular format.Also find the total number of coins used.
+StNo	Denominations	Value(V)	CoinsUsed	RemainingValue	AccumulatedValue
+1	500		17333		34		333		17000
+2	200		333		1		133		200
+3	100		133		1		33		100
+
+#include <stdio.h>
+
+int main() {
+    int denominations[] = {500, 200, 100, 50, 20, 10, 5, 2, 1};
+    int n = sizeof(denominations) / sizeof(denominations[0]);
+    int value = 17333;
+    int remainingValue = value;
+    int totalCoinsUsed = 0;
+
+    printf("SlNo\tDenominations\tValue(V)\tCoinsUsed\tRemainingValue\tAccumulatedValue\n");
+
+    for (int i = 0; i < n; i++) {
+        int coinsUsed = remainingValue / denominations[i];  // Calculate number of coins of current denomination
+        int accumulatedValue = coinsUsed * denominations[i]; // Calculate accumulated value for this denomination
+        remainingValue -= accumulatedValue;  // Subtract accumulated value from remaining value
+
+        // Print the current step
+        printf("%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", 
+            i + 1, 
+            denominations[i], 
+            value, 
+            coinsUsed, 
+            remainingValue, 
+            accumulatedValue);
+        
+        totalCoinsUsed += coinsUsed; // Update total number of coins used
+    }
+
+    printf("\nTotal number of coins used: %d\n", totalCoinsUsed);
+
+    return 0;
+}
+
+/* OUTPUT
+SlNo	Denominations	Value(V)	CoinsUsed	RemainingValue	AccumulatedValue
+1	500		17333		34		333		17000
+2	200		17333		1		133		200
+3	100		17333		1		33		100
+4	50		17333		0		33		0
+5	20		17333		1		13		20
+6	10		17333		1		3		10
+7	5		17333		0		3		0
+8	2		17333		1		1		2
+9	1		17333		1		0		1
+
+Total number of coins used: 40
+*/
