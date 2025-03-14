@@ -1,0 +1,67 @@
+// C Program for Finding Maximum and Minimum using Divide and Conquer
+
+#include <stdio.h>
+#include <limits.h>
+
+// Structure to store both min and max
+typedef struct {
+    int min;
+    int max;
+} MinMax;
+
+// Function to find min and max of an array using Divide and Conquer
+MinMax findMinMax(int arr[], int low, int high) {
+    MinMax result, leftResult, rightResult;
+    
+    // If the array has only one element
+    if (low == high) {
+        result.min = arr[low];
+        result.max = arr[low];
+        return result;
+    }
+
+    // If the array has two elements
+    if (high == low + 1) {
+        if (arr[low] < arr[high]) {
+            result.min = arr[low];
+            result.max = arr[high];
+        } else {
+            result.min = arr[high];
+            result.max = arr[low];
+        }
+        return result;
+    }
+
+    // Divide the array into two halves
+    int mid = (low + high) / 2;
+
+    // Recursively find min and max in the left half
+    leftResult = findMinMax(arr, low, mid);
+
+    // Recursively find min and max in the right half
+    rightResult = findMinMax(arr, mid + 1, high);
+
+    // Combine the results
+    result.min = (leftResult.min < rightResult.min) ? leftResult.min : rightResult.min;
+    result.max = (leftResult.max > rightResult.max) ? leftResult.max : rightResult.max;
+
+    return result;
+}
+
+// Driver function to test the above function
+int main() {
+    int arr[] = {3, 1, 5, 6, 2, 8, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    MinMax result = findMinMax(arr, 0, n - 1);
+
+    printf("Minimum Element: %d\n", result.min);
+    printf("Maximum Element: %d\n", result.max);
+
+    return 0;
+}
+
+/* OUTPUT
+Minimum Element: 1
+Maximum Element: 8
+*/
