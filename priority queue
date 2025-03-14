@@ -1,5 +1,6 @@
-// C Program for implementation of priority queue
+// C Program for implementation of priority queue using max and min haep
 
+// MAX HEAP
 #include <stdio.h>
 
 int size = 0;
@@ -85,7 +86,113 @@ int main() {
   printArray(array, size);
 }
 
-/* OUTPUT
+/* OUTPUT - 1
 Max-Heap array: 9 5 4 3 2 
 After deleting an element: 9 5 2 3 
+*/
+
+// MIN HEAP
+#include <stdio.h>
+
+int size = 0;
+
+// Function to swap two elements
+void swap(int *a, int *b) {
+    int temp = *b;
+    *b = *a;
+    *a = temp;
+}
+
+// Function to heapify the tree (Min-Heap)
+void heapify(int array[], int size, int i) {
+    if (size == 1) {
+        printf("Single element in the heap\n");
+        return;
+    }
+
+    int smallest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+
+    // Find the smallest among root, left child, and right child
+    if (l < size && array[l] < array[smallest])
+        smallest = l;
+    if (r < size && array[r] < array[smallest])
+        smallest = r;
+
+    // Swap and continue heapifying if root is not smallest
+    if (smallest != i) {
+        swap(&array[i], &array[smallest]);
+        heapify(array, size, smallest);
+    }
+}
+
+// Function to insert an element into the Min-Heap
+void insert(int array[], int newNum) {
+    if (size == 0) {
+        array[0] = newNum;
+        size += 1;
+    } else {
+        array[size] = newNum;
+        size += 1;
+
+        // Ensure Min-Heap property by heapifying the tree from bottom to top
+        for (int i = size / 2 - 1; i >= 0; i--) {
+            heapify(array, size, i);
+        }
+    }
+}
+
+// Function to delete a specific element (root in this case) from the Min-Heap
+void deleteRoot(int array[], int num) {
+    int i;
+    for (i = 0; i < size; i++) {
+        if (num == array[i]) {
+            break;
+        }
+    }
+
+    // Swap the root with the last element
+    swap(&array[i], &array[size - 1]);
+    size -= 1;
+
+    // Ensure Min-Heap property after deletion
+    for (int i = size / 2 - 1; i >= 0; i--) {
+        heapify(array, size, i);
+    }
+}
+
+// Function to print the array (heap)
+void printArray(int array[], int size) {
+    for (int i = 0; i < size; ++i) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+}
+
+// Driver code
+int main() {
+    int array[10];
+
+    insert(array, 3);
+    insert(array, 4);
+    insert(array, 9);
+    insert(array, 5);
+    insert(array, 2);
+
+    printf("Min-Heap array: ");
+    printArray(array, size);
+
+    deleteRoot(array, 4); // Delete the element 4 from the Min-Heap
+
+    printf("After deleting an element: ");
+    printArray(array, size);
+
+    return 0;
+}
+
+/* OUTPUT - 1
+Min-Heap array: 2 3 9 5 4 
+After deleting an element: 2 3 9 5 
+
 */
