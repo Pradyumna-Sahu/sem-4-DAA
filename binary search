@@ -1,11 +1,9 @@
-// C Program for binary search
+// C Program for binary search using iterative and recursive method
 
-// Binary Search in C
-
+// Iterative Method
 #include <stdio.h>
 
 int binarySearch(int array[], int x, int low, int high) {
-  // Repeat until the pointers low and high meet each other
   while (low <= high) {
     int mid = low + (high - low) / 2;
 
@@ -33,3 +31,44 @@ int main(void) {
     printf("Element is found at index %d", result);
   return 0;
 }
+
+/* OUTPUT - 1
+Element is found at index 1
+*/
+
+//Recursive Method
+#include <stdio.h>
+
+int binarySearch(int array[], int x, int low, int high) {
+  if (high >= low) {
+    int mid = low + (high - low) / 2;
+
+    // If found at mid, then return it
+    if (x == array[mid])
+      return mid;
+
+    // Search the right half
+    if (x > array[mid])
+      return binarySearch(array, x, mid + 1, high);
+
+    // Search the left half
+    return binarySearch(array, x, low, mid - 1);
+  }
+
+  return -1;
+}
+
+int main(void) {
+  int array[] = {3, 4, 5, 6, 7, 8, 9};
+  int n = sizeof(array) / sizeof(array[0]);
+  int x = 4;
+  int result = binarySearch(array, x, 0, n - 1);
+  if (result == -1)
+    printf("Not found");
+  else
+    printf("Element is found at index %d", result);
+}
+
+/* OUTPUT - 2
+Element is found at index 1
+*/
