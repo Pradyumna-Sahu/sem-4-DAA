@@ -1,0 +1,93 @@
+// C Program where Suppose you are given with a set of n characters [c0,c1,c2,...,cn] with their frequencies [f0,f1,f2,...fn]. Use hoffman coding to display the minimum prioirity queue content step by step.
+
+#include <stdio.h>
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void minHeapify(int heap[], int n, int i) {
+    int smallest = i, left = 2 * i + 1, right = 2 * i + 2;
+    if (left < n && heap[left] < heap[smallest]) smallest = left;
+    if (right < n && heap[right] < heap[smallest]) smallest = right;
+    if (smallest != i) {
+        swap(&heap[i], &heap[smallest]);
+        minHeapify(heap, n, smallest);
+    }
+}
+
+void buildMinHeap(int heap[], int n) {
+    for (int i = (n / 2) - 1; i >= 0; i--)
+        minHeapify(heap, n, i);
+}
+
+int extractMin(int heap[], int *n) {
+    int min = heap[0];
+    heap[0] = heap[--(*n)];
+    minHeapify(heap, *n, 0);
+    return min;
+}
+
+void insertMinHeap(int heap[], int *n, int value) {
+    int i = (*n)++;
+    while (i && value < heap[(i - 1) / 2]) {
+        heap[i] = heap[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+    heap[i] = value;
+}
+
+void huffmanCoding(int freq[], int n) {
+    buildMinHeap(freq, n);
+    printf("Step by Step Min-Priority Queue:\n");
+    
+    // Process the heap until only one node remains
+    while (n > 1) {
+        int left = extractMin(freq, &n);
+        int right = extractMin(freq, &n);
+        
+        // Combine the two nodes
+        int combined = left + right;
+        insertMinHeap(freq, &n, combined);
+
+        // Print the current state of the heap
+        for (int i = 0; i < n; i++) {
+            printf("%d ", freq[i]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter number of characters: ");
+    scanf("%d", &n);
+
+    int freq[n];
+    printf("Enter frequencies for the characters:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Frequency of character %d: ", i + 1);
+        scanf("%d", &freq[i]);
+    }
+
+    huffmanCoding(freq, n);
+    
+    return 0;
+}
+
+/* OUTPUT
+Enter number of characters: 5
+Enter frequencies for the characters:
+Frequency of character 1: 7
+Frequency of character 2: 6
+Frequency of character 3: 8
+Frequency of character 4: 9
+Frequency of character 5: 2
+Step by Step Min-Priority Queue:
+7 8 8 9 
+8 9 15 
+15 17 
+32 
+*/
