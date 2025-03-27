@@ -1,0 +1,46 @@
+/* C Program where the given dimensions of a sequence of matrices in an array arr[], where thedimension of the ith matrix is (arr[i - 1] * arr[i]).
+The task is to find the most efficient way to multiply these matrices together such that the total number of element multiplication is minimum.
+*/
+
+#include <stdio.h>
+
+// Function to find the minimum number of multiplications needed to multiply a chain of matrices
+int matrixChainMultiplication(int arr[], int n) {
+    int m[n][n]; // m[i][j] = Minimum number of multiplications needed to compute the matrix A[i]A[i+1]...A[j]
+
+    int i, j, k, L, q;
+
+    // Cost is zero when multiplying one matrix
+    for (i = 1; i < n; i++)
+        m[i][i] = 0;
+
+    // L is chain length.
+    for (L = 2; L < n; L++) {
+        for (i = 1; i < n - L + 1; i++) {
+            j = i + L - 1;
+            m[i][j] = -1; // Initialize to -1 (indicating not yet calculated)
+            for (k = i; k < j; k++) {
+                // Calculate the cost of multiplying A[i]A[i+1]...A[k] and A[k+1]A[k+2]...A[j]
+                q = m[i][k] + m[k + 1][j] + arr[i - 1] * arr[k] * arr[j];
+                if (m[i][j] == -1 || q < m[i][j]) { // Use -1 to represent infinity
+                    m[i][j] = q;
+                }
+            }
+        }
+    }
+
+    return m[1][n - 1]; // Return the minimum number of multiplications
+}
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 3}; // Dimensions of the matrices
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Minimum number of multiplications is %d\n", matrixChainMultiplication(arr, n));
+
+    return 0;
+}
+
+/* OUTPUT
+Minimum number of multiplications is 30
+*/
