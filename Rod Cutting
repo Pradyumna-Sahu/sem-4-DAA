@@ -1,0 +1,52 @@
+// C Program to perform Rod Cuuting where price of each rod length is given
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+int cut_rod(int price[], int n) {
+    int dp[n + 1]; // Use dp array for memoization
+    dp[0] = 0;
+
+    for (int i = 1; i <= n; i++) {
+        int max_profit = -1;
+        for (int j = 1; j <= i; j++) {
+            if (price[j - 1] != -1) {
+                int current_profit = price[j - 1] + dp[i - j];
+                if (current_profit > max_profit) {
+                    max_profit = current_profit;
+                }
+            }
+        }
+        dp[i] = max_profit;
+    }
+    return dp[n];
+}
+
+int main() {
+    int n;
+    printf("Enter total length of the rod: ");
+    scanf("%d", &n);
+    int price[n];
+    printf("Enter price of each length piece of the rod (1 to %d):\n", n);
+    for (int i = 0; i < n; i++) {
+        printf("Enter price for length %d: ", i + 1);
+        scanf("%d", &price[i]);
+    }
+    int max_profit = cut_rod(price, n);
+    printf("Maximum profit that can be obtained is %d\n", max_profit);
+    return 0;
+}
+
+/* OUTPUT
+Enter total length of the rod: 4
+Enter price of each length piece of the rod (1 to 4):
+Enter price for length 1: 200
+Enter price for length 2: 250
+Enter price for length 3: 300
+Enter price for length 4: 350
+Maximum profit that can be obtained is 800
+*/
