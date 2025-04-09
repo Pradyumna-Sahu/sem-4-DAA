@@ -20,7 +20,7 @@ void dfs(int source, int n) {
         printf("%d ",node);
         
         for(int v = n - 1; v >= 0; v--) {
-            if(adj[node][v] = 1 && !visited[v]) {
+            if(adj[node][v] == 1 && !visited[v]) {
                 stack[++top] = v;
                 visited[v] = 1;
             }
@@ -86,5 +86,5 @@ Enter the source node for DFS Traversal: 0
 0 1 1 0 1 
 0 1 0 1 0 
 DFS Travesal starting from 0 node:
-0 1 2 3 4 
+0 1 3 4 2 
 */
