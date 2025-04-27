@@ -1,0 +1,81 @@
+// C Program to implemnt Bucket Sort
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+// Structure for a node in the linked list (representing a bucket)
+struct Node {
+    float data;
+    struct Node* next;
+};
+
+// Function to create a new node
+struct Node* createNode(float data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert into a bucket (sorted)
+void insertBucket(struct Node** bucket, float data) {
+    struct Node* newNode = createNode(data);
+    if (!*bucket || data < (*bucket)->data) {
+        newNode->next = *bucket;
+        *bucket = newNode;
+    } else {
+        struct Node* curr = *bucket;
+        while (curr->next && curr->next->data < data)
+            curr = curr->next;
+        newNode->next = curr->next;
+        curr->next = newNode;
+    }
+}
+
+// Bucket Sort function
+void bucketSort(float arr[], int n) {
+    struct Node** buckets = (struct Node**)malloc(n * sizeof(struct Node*));
+    for (int i = 0; i < n; i++) buckets[i] = NULL;
+
+    for (int i = 0; i < n; i++) {
+        int index = (int)(n * arr[i]);
+        insertBucket(&buckets[index], arr[i]);
+    }
+
+    int idx = 0;
+    for (int i = 0; i < n; i++) {
+        struct Node* curr = buckets[i];
+        while (curr) {
+            arr[idx++] = curr->data;
+            curr = curr->next;
+        }
+        // Free bucket list (optional here, can be done at the end)
+        struct Node* temp = buckets[i];
+        while (temp) {
+            struct Node* next = temp->next;
+            free(temp);
+            temp = next;
+        }
+    }
+    free(buckets);
+}
+
+void printArray(float arr[], int n) {
+    for (int i = 0; i < n; i++) printf("%.2f ", arr[i]);
+    printf("\n");
+}
+
+int main() {
+    float arr[] = {0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printf("Original: "); printArray(arr, n);
+    bucketSort(arr, n);
+    printf("Sorted: "); printArray(arr, n);
+    return 0;
+}
+
+/* OUTPUT
+Original: 0.90 0.56 0.66 0.12 0.67 0.34 
+Sorted: 0.12 0.34 0.56 0.66 0.67 0.90 
+*/
