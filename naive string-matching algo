@@ -1,0 +1,55 @@
+// C Program to implement naive string-matching algorithm
+
+#include <stdio.h>
+#include <string.h>
+
+// Function to perform naive string matching
+void naiveSearch(char text[], char pattern[]) {
+    int n = strlen(text);
+    int m = strlen(pattern);
+
+    printf("Pattern found at positions: ");
+    int found = 0;
+
+    // Slide the pattern over text one by one
+    for (int i = 0; i <= n - m; i++) {
+        int j;
+
+        // Check for match
+        for (j = 0; j < m; j++) {
+            if (text[i + j] != pattern[j])
+                break;
+        }
+
+        if (j == m) {
+            printf("%d ", i);  // Pattern found at index i
+            found = 1;
+        }
+    }
+
+    if (!found)
+        printf("None");
+
+    printf("\n");
+}
+
+int main() {
+    char text[100], pattern[100];
+
+    printf("Enter the text: ");
+    fgets(text, sizeof(text), stdin);
+    text[strcspn(text, "\n")] = '\0';  // Remove newline character
+
+    printf("Enter the pattern: ");
+    fgets(pattern, sizeof(pattern), stdin);
+    pattern[strcspn(pattern, "\n")] = '\0';
+
+    naiveSearch(text, pattern);
+    return 0;
+}
+
+/* OUTPUT
+Enter the text: ababcabcabababd
+Enter the pattern: ababd
+Pattern found at positions: 10 
+*/
