@@ -1,5 +1,8 @@
-//Write a C Program to find an optimal solution by using fractional kanpsack. Capacity of knapsack is M. We have N objects with their respective weights in a set W and profit a set P. Fill the knapsack that maximizes total profit and display the content of the knapsack. Use insertion sort to arrange P/W). 
-//Given, W[3] = {10,20,30} and P[3] = {60,100,120} and M = 50
+/*Write a C Program to find an optimal solution by using fractional kanpsack. Capacity of knapsack is M.
+We have N objects with their respective weights in a set W and profit a set P. 
+Fill the knapsack that maximizes total profit and display the content of the knapsack. Use insertion sort to arrange P/W). 
+Given, W[3] = {10,20,30} and P[3] = {60,100,120} and M = 50
+*/
 
 #include <stdio.h>
 
